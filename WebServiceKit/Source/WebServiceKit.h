@@ -1,0 +1,13 @@
+//
+//  WebServiceKit.h
+//  WebServiceKit
+//
+//  Created by Geoffrey Foster on 11-04-16.
+//  Copyright 2011 g-Off.net. All rights reserved.
+//
+
+#import <WebServiceKit/WSKService.h>
+#import <WebServiceKit/WSKRequest.h>
+#import <WebServiceKit/WSKResponse.h>
+#import <WebServiceKit/WSKSOAPEncoder.h>
+#import <WebServiceKit/WSKSOAPDecoder.h>
