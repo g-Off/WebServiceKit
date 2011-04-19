@@ -13,6 +13,8 @@
 
 @implementation WSKRequest
 
+@synthesize urlRequest;
+
 + (WSKRequest *)requestWithURL:(NSURL *)aURL
 {
 	return [[[[self class] alloc] initWithURL:aURL] autorelease];

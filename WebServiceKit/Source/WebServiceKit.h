@@ -9,5 +9,7 @@
 #import <WebServiceKit/WSKService.h>
 #import <WebServiceKit/WSKRequest.h>
 #import <WebServiceKit/WSKResponse.h>
+
+#import <WebServiceKit/WSKSOAPService.h>
 #import <WebServiceKit/WSKSOAPEncoder.h>
 #import <WebServiceKit/WSKSOAPDecoder.h>

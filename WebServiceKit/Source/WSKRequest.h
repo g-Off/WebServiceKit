@@ -23,6 +23,8 @@
 	NSURL *url;
 }
 
+@property (readonly) NSMutableURLRequest *urlRequest;
+
 + (WSKRequest *)requestWithURL:(NSURL *)aURL;
 
 - (id)initWithURL:(NSURL *)aURL;
