@@ -27,4 +27,6 @@
 @property (readwrite, assign) id delegate;
 @property (readonly) NSXMLElement *rootElement;
 
+- (void)reset;
+
 @end

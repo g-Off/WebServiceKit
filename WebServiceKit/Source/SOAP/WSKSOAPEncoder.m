@@ -29,6 +29,13 @@
 	[super dealloc];
 }
 
+- (void)reset
+{
+	currentElement = nil;
+	[rootElement release];
+	rootElement = nil;
+}
+
 #pragma mark - NSCoder
 
 - (BOOL)allowsKeyedCoding
