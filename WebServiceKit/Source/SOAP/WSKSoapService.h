@@ -11,8 +11,10 @@
 
 @interface WSKSoapService : WSKService {
 @private
-    
+    NSURL *serviceURL;
 }
+
++ (WSKSoapService *)serviceWithURL:(NSURL *)aURL;
 
 - (id)initWithServiceURL:(NSURL *)aURL;
 

@@ -8,22 +8,28 @@
 
 #import "WSKSoapService.h"
 #import "WSKSOAPEncoder.h"
+#import "WSKRequest.h"
 
 NSString * const WSKSoapEnvelopeXMLNS = @"http://www.w3.org/2003/05/soap-envelope";
 NSString * const WSKSoapEnvelopeURI = @"soap";
 
 @interface WSKSoapService ()
 
-- (NSXMLElement *)packageElementInEnvelope:(NSXMLElement *)element;
+- (NSXMLDocument *)packageElementInEnvelope:(NSXMLElement *)element;
 
 @end
 
 @implementation WSKSoapService
 
++ (WSKSoapService *)serviceWithURL:(NSURL *)aURL
+{
+	return [[[[self class] alloc] initWithServiceURL:aURL] autorelease];
+}
+
 - (id)initWithServiceURL:(NSURL *)aURL
 {
 	if ((self = [super init])) {
-		
+		serviceURL = [aURL retain];
 	}
 	
 	return self;
@@ -53,7 +59,13 @@ NSString * const WSKSoapEnvelopeURI = @"soap";
 	[pool drain];
 	[encoder release];
 	
+	NSXMLDocument *envelope = [self packageElementInEnvelope:methodElement];
+	NSLog(@"%@", envelope);
 	
+	WSKRequest *request = [WSKRequest requestWithURL:serviceURL];
+	NSMutableURLRequest *urlRequest = [request urlRequest];
+	[urlRequest setHTTPMethod:@"POST"];
+	[urlRequest setHTTPBody:[envelope XMLData]];
 }
 
 - (void)callAction:(NSString *)action withObjects:(const id [])objects andKeys:(const id [])keys count:(NSUInteger)cnt
@@ -84,7 +96,7 @@ NSString * const WSKSoapEnvelopeURI = @"soap";
 
 #pragma mark -
 
-- (NSXMLElement *)packageElementInEnvelope:(NSXMLElement *)element
+- (NSXMLDocument *)packageElementInEnvelope:(NSXMLElement *)element
 {
 	/*
 	 WSKSOAPEnvelope *env = [[WSKSOAPEnvelope alloc] init];
@@ -99,17 +111,24 @@ NSString * const WSKSoapEnvelopeURI = @"soap";
 	 [doc validateAndReturnError:&error];
 	 NSLog(@"%@", error);
 	 */
+	
 	NSXMLElement *envelope = [NSXMLElement elementWithName:@"Envelope" URI:WSKSoapEnvelopeURI];
 	NSXMLNode *soapNamespace = [NSXMLNode namespaceWithName:WSKSoapEnvelopeURI stringValue:WSKSoapEnvelopeXMLNS];
 	[envelope addNamespace:soapNamespace];
 	
 	NSXMLElement *header = [NSXMLElement elementWithName:@"Header" URI:WSKSoapEnvelopeURI];
 	NSXMLElement *body = [NSXMLElement elementWithName:@"Body" URI:WSKSoapEnvelopeURI];
+	[body addChild:element];
 	
 	[envelope addChild:header];
 	[envelope addChild:body];
 	
-	return envelope;
+	NSXMLDocument *envelopeDocument = [NSXMLDocument documentWithRootElement:envelope];
+	[envelopeDocument setCharacterEncoding:@"UTF-8"];
+	[envelopeDocument setVersion:@"1.0"];
+	[envelopeDocument setStandalone:YES];
+	
+	return envelopeDocument;
 }
 
 @end
