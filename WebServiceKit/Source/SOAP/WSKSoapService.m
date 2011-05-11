@@ -8,12 +8,17 @@
 
 #import "WSKSoapService.h"
 #import "WSKSOAPEncoder.h"
-#import "WSKRequest.h"
+#import "WSKSoapRequest.h"
+#import "WSKSoapResponse.h"
 
-NSString * const WSKSoapEnvelopeXMLNS = @"http://www.w3.org/2003/05/soap-envelope";
-NSString * const WSKSoapEnvelopeURI = @"soap";
+#import "NSXMLElement+WebServiceKit.h"
 
-@interface WSKSoapService ()
+NSString * const WSKSoapEnvelopeURI = @"http://www.w3.org/2003/05/soap-envelope";
+NSString * const WSKSoapEncodingURI = @"http://www.w3.org/2003/05/soap-encoding";
+NSString * const WSKSoapRPCURI = @"http://www.w3.org/2003/05/soap-rpc";
+NSString * const WSKSoapEnvelopePrefix = @"env";
+
+@interface WSKSoapService () <WSKRequestDelegate>
 
 - (NSXMLDocument *)packageElementInEnvelope:(NSXMLElement *)element;
 
@@ -30,12 +35,54 @@ NSString * const WSKSoapEnvelopeURI = @"soap";
 {
 	if ((self = [super init])) {
 		serviceURL = [aURL retain];
+		namespaces = [[NSMutableDictionary alloc] init];
 	}
 	
 	return self;
 }
 
-- (void)callAction:(NSString *)action withObjects:(NSArray *)objects andKeys:(NSArray *)keys
+- (void)addURI:(NSString *)uri forNamespace:(NSString *)ns
+{
+	[namespaces setObject:ns forKey:uri];
+}
+
+#pragma mark -
+
+- (NSXMLDocument *)packageElementInEnvelope:(NSXMLElement *)element
+{
+	NSXMLElement *envelope = [NSXMLElement elementWithName:@"Envelope" prefix:WSKSoapEnvelopePrefix URI:WSKSoapEnvelopeURI];
+	NSXMLNode *soapNamespace = [NSXMLNode namespaceWithName:WSKSoapEnvelopePrefix stringValue:WSKSoapEnvelopeURI];
+	[envelope addNamespace:soapNamespace];
+	[envelope addNamespace:[NSXMLNode predefinedNamespaceForPrefix:@"xsi"]];
+	[envelope addNamespace:[NSXMLNode predefinedNamespaceForPrefix:@"xs"]];
+	
+	[namespaces enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+		[envelope addNamespace:[NSXMLNode namespaceWithName:key stringValue:obj]];
+	}];
+	
+	NSXMLElement *header = [NSXMLElement elementWithName:@"Header" prefix:WSKSoapEnvelopePrefix URI:WSKSoapEnvelopeURI];
+	NSXMLElement *body = [NSXMLElement elementWithName:@"Body" prefix:WSKSoapEnvelopePrefix URI:WSKSoapEnvelopeURI];
+	[body addChild:element];
+	
+	[envelope addChild:header];
+	[envelope addChild:body];
+	
+	NSXMLDocument *envelopeDocument = [NSXMLDocument documentWithRootElement:envelope];
+	[envelopeDocument setCharacterEncoding:@"UTF-8"];
+	[envelopeDocument setVersion:@"1.0"];
+//	[envelopeDocument setStandalone:YES];
+	
+	return envelopeDocument;
+}
+
+#pragma mark - WSKRequestDelegate
+
+- (void)request:(WSKRequest *)request didFinishWithResponse:(WSKResponse *)response
+{
+	
+}
+
+- (WSKRequest *)requestWithAction:(NSString *)action withObjects:(NSArray *)objects andKeys:(NSArray *)keys
 {
 	NSAssert([objects count] == [keys count], @"Mismatched size of keys and objects");
 	
@@ -61,19 +108,27 @@ NSString * const WSKSoapEnvelopeURI = @"soap";
 	
 	NSXMLDocument *envelope = [self packageElementInEnvelope:methodElement];
 	NSLog(@"%@", envelope);
+	NSData *body = [envelope XMLData];
 	
-	WSKRequest *request = [WSKRequest requestWithURL:serviceURL];
+	WSKRequest *request = [WSKSoapRequest requestWithAction:action URL:serviceURL];
+	[request setResponseClass:[WSKSoapResponse class]];
 	NSMutableURLRequest *urlRequest = [request urlRequest];
+	[urlRequest setCachePolicy:NSURLRequestReloadIgnoringCacheData];
 	[urlRequest setHTTPMethod:@"POST"];
-	[urlRequest setHTTPBody:[envelope XMLData]];
+	[urlRequest setHTTPBody:body];
+	[urlRequest setValue:@"text/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+	[urlRequest setValue:@"\"\"" forHTTPHeaderField:@"SOAPaction"];
+	[urlRequest setValue:[NSString stringWithFormat:@"%d", [body length]] forHTTPHeaderField:@"Content-Length"];
+	
+	return request;
 }
 
-- (void)callAction:(NSString *)action withObjects:(const id [])objects andKeys:(const id [])keys count:(NSUInteger)cnt
+- (WSKRequest *)requestWithAction:(NSString *)action withObjects:(const id [])objects andKeys:(const id [])keys count:(NSUInteger)cnt
 {
-	[self callAction:action withObjects:[NSArray arrayWithObjects:objects count:cnt] andKeys:[NSArray arrayWithObjects:keys count:cnt]];
+	return [self requestWithAction:action withObjects:[NSArray arrayWithObjects:objects count:cnt] andKeys:[NSArray arrayWithObjects:keys count:cnt]];
 }
 
-- (void)callAction:(NSString *)action withArgumentsAndKeys:(id)firstObject, ...
+- (WSKRequest *)requestWithAction:(NSString *)action withArgumentsAndKeys:(id)firstObject, ...
 {
 	NSMutableArray *objects = [NSMutableArray array];
 	NSMutableArray *keys = [NSMutableArray array];
@@ -91,44 +146,20 @@ NSString * const WSKSoapEnvelopeURI = @"soap";
 	}
 	va_end(args);
 	
-	[self callAction:action withObjects:objects andKeys:keys];
+	return [self requestWithAction:action withObjects:objects andKeys:keys];
 }
 
-#pragma mark -
-
-- (NSXMLDocument *)packageElementInEnvelope:(NSXMLElement *)element
+- (void)performRequest:(WSKRequest *)request
 {
-	/*
-	 WSKSOAPEnvelope *env = [[WSKSOAPEnvelope alloc] init];
-	 NSXMLElement *envelope = [env envelope];
-	 NSXMLDocument *doc = [NSXMLDocument documentWithRootElement:envelope];
-	 [doc setCharacterEncoding:@"UTF-8"];
-	 [doc setVersion:@"1.0"];
-	 [env release];
-	 
-	 NSLog(@"%@", doc);
-	 NSError *error = nil;
-	 [doc validateAndReturnError:&error];
-	 NSLog(@"%@", error);
-	 */
+#if NS_BLOCKS_AVAILABLE
+	[request setResponseHandler:^(WSKRequest *request, WSKResponse *response) {
+		NSLog(@"hello!!");
+	}];
+#else
+	[request setDelegate:self];
+#endif
 	
-	NSXMLElement *envelope = [NSXMLElement elementWithName:@"Envelope" URI:WSKSoapEnvelopeURI];
-	NSXMLNode *soapNamespace = [NSXMLNode namespaceWithName:WSKSoapEnvelopeURI stringValue:WSKSoapEnvelopeXMLNS];
-	[envelope addNamespace:soapNamespace];
-	
-	NSXMLElement *header = [NSXMLElement elementWithName:@"Header" URI:WSKSoapEnvelopeURI];
-	NSXMLElement *body = [NSXMLElement elementWithName:@"Body" URI:WSKSoapEnvelopeURI];
-	[body addChild:element];
-	
-	[envelope addChild:header];
-	[envelope addChild:body];
-	
-	NSXMLDocument *envelopeDocument = [NSXMLDocument documentWithRootElement:envelope];
-	[envelopeDocument setCharacterEncoding:@"UTF-8"];
-	[envelopeDocument setVersion:@"1.0"];
-	[envelopeDocument setStandalone:YES];
-	
-	return envelopeDocument;
+	[self sendRequest:request];
 }
 
 @end

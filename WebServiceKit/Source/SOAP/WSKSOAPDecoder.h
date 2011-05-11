@@ -11,7 +11,14 @@
 
 @interface WSKSOAPDecoder : NSCoder {
 @private
-    
+	NSMutableArray *nodeStack;
 }
+
++ (id)unarchiveObjectWithRoot:(NSXMLElement *)element;
+
+- (id)initWithRootObject:(NSXMLElement *)element;
+
++ (void)setClass:(Class)cls forElementName:(NSString *)elementName withNamespace:(NSString *)aNamespace;
++ (Class)classForElementName:(NSString *)elementName withNamespace:(NSString *)aNamespace;
 
 @end

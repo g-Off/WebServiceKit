@@ -7,23 +7,30 @@
 //
 
 #import "WSKResponse.h"
-
+#import "WSKRequest.h"
 
 @implementation WSKResponse
 
-- (id)init
+@synthesize error;
+@synthesize request;
+
+- (id)initWithRequest:(WSKRequest *)aRequest
 {
-    self = [super init];
-    if (self) {
-        // Initialization code here.
-    }
-    
-    return self;
+	if ((self = [super init])) {
+		data = [[aRequest responseData] copy];
+		request = [aRequest retain];
+	}
+	
+	return self;
 }
 
 - (void)dealloc
 {
-    [super dealloc];
+	[data release];
+	[error release];
+	[request release];
+	
+	[super dealloc];
 }
 
 @end

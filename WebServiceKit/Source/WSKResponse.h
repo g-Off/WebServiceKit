@@ -11,8 +11,14 @@
 @class WSKRequest;
 
 @interface WSKResponse : NSObject {
-@private
-    
+	NSData *data;
+	NSError *error;
+	WSKRequest *request;
 }
+
+@property (readwrite, nonatomic, retain) NSError *error;
+@property (readonly) WSKRequest *request;
+
+- (id)initWithRequest:(WSKRequest *)aRequest;
 
 @end

@@ -7,23 +7,66 @@
 //
 
 #import "WSKRequest.h"
+#import "WSKResponse.h"
 
 @interface WSKRequest (NSURLConnectionDelegate) <NSURLConnectionDelegate>
+
+- (void)requestFinishedWithResponse:(WSKResponse *)response;
+
 @end
 
 @implementation WSKRequest
 
+@synthesize url;
+@synthesize responseClass;
 @synthesize urlRequest;
+@synthesize delegate;
+@synthesize responseData;
+#if NS_BLOCKS_AVAILABLE
+@synthesize responseHandler;
+#endif
+
++ (WSKRequest *)request
+{
+	return [[[[self class] alloc] init] autorelease];
+}
 
 + (WSKRequest *)requestWithURL:(NSURL *)aURL
 {
 	return [[[[self class] alloc] initWithURL:aURL] autorelease];
 }
 
-- (id)initWithURL:(NSURL *)aURL
++ (WSKRequest *)requestWithURL:(NSURL *)aURL delegate:(id)aDelegate
+{
+	WSKRequest *request = [self requestWithURL:aURL];
+	[request setDelegate:aDelegate];
+	return request;
+}
+
+#if NS_BLOCKS_AVAILABLE
++ (WSKRequest *)requestWithURL:(NSURL *)aURL responseHandler:(WSKRequestResponseBlock)aResponseHandler
+{
+	WSKRequest *request = [self requestWithURL:aURL];
+	[request setResponseHandler:aResponseHandler];
+	return request;
+}
+#endif
+
+- (id)init
 {
 	if ((self = [super init])) {
+		urlRequest = [[NSMutableURLRequest alloc] init];
+		responseClass = [WSKResponse class];
+	}
+	
+	return self;
+}
+
+- (id)initWithURL:(NSURL *)aURL
+{
+	if ((self = [self init])) {
 		url = [aURL retain];
+		[urlRequest setURL:url];
 	}
 	
 	return self;
@@ -31,10 +74,18 @@
 
 - (void)dealloc
 {
+	delegate = nil;
+	
 	[url release];
 	[responseData release];
 	[urlRequest release];
 	[urlConnection release];
+	
+	delegate = nil;
+	
+#if NS_BLOCKS_AVAILABLE
+	[responseHandler release];
+#endif
 	
 	[super dealloc];
 }
@@ -57,7 +108,6 @@
 - (void)start
 {
 	responseData = [[NSMutableData alloc] init];
-	urlRequest = [[NSMutableURLRequest alloc] initWithURL:url];
 	urlConnection = [[NSURLConnection alloc] initWithRequest:urlRequest delegate:self startImmediately:NO];
 	[urlConnection scheduleInRunLoop:[NSRunLoop mainRunLoop]  forMode:NSDefaultRunLoopMode];
 	[urlConnection start];
@@ -70,11 +120,13 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
+	// TODO: handle this case
 	NSLog(@"%s - %@", __PRETTY_FUNCTION__, response);
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
+	// TODO: handle this case
 	NSLog(@"%s - %@", __PRETTY_FUNCTION__, error);
 	
 	[self willChangeValueForKey:@"isExecuting"];
@@ -83,13 +135,15 @@
 	[self willChangeValueForKey:@"isFinished"];
 	finished = YES;
 	[self didChangeValueForKey:@"isFinished"];
+	
+	WSKResponse *response = [[[responseClass alloc] init] autorelease];
+	[response setError:error];
+	[self requestFinishedWithResponse:response];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-	//NSError *error = nil;
-	//NSXMLDocument *xmlDocument = [[NSXMLDocument alloc] initWithData:responseData options:<#(NSUInteger)#> error:&error];
-	NSLog(@"%s - %@", __PRETTY_FUNCTION__, responseData);
+	NSLog(@"%@", [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease]);
 	
 	[self willChangeValueForKey:@"isExecuting"];
 	executing = NO;
@@ -97,11 +151,28 @@
 	[self willChangeValueForKey:@"isFinished"];
 	finished = YES;
 	[self didChangeValueForKey:@"isFinished"];
+	
+	WSKResponse *response = [[[responseClass alloc] initWithRequest:self] autorelease];
+	[self requestFinishedWithResponse:response];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
 	[responseData appendData:data];
+}
+
+- (void)requestFinishedWithResponse:(WSKResponse *)response
+{
+#if NS_BLOCKS_AVAILABLE
+	if (responseHandler) {
+		responseHandler(self, response);
+	} else
+#endif
+	{
+		if (delegate && [delegate respondsToSelector:@selector(request:didFinishWithResponse:)]) {
+//			[delegate request:self didFinishWithResponse:response];
+		}
+	}
 }
 
 @end
