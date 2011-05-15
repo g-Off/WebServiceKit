@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6C714DA81378F40B00E1E68A /* WSKSoapRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C714DA61378F40B00E1E68A /* WSKSoapRequest.h */; };
+		6C714DA81378F40B00E1E68A /* WSKSoapRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C714DA61378F40B00E1E68A /* WSKSoapRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C714DA91378F40B00E1E68A /* WSKSoapRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C714DA71378F40B00E1E68A /* WSKSoapRequest.m */; };
 		6C7A918F135D19C2007E530E /* WSKSOAPDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C7A9187135D19C2007E530E /* WSKSOAPDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C7A9190135D19C2007E530E /* WSKSOAPDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7A9188135D19C2007E530E /* WSKSOAPDecoder.m */; };
@@ -188,11 +188,11 @@
 				6C7A918F135D19C2007E530E /* WSKSOAPDecoder.h in Headers */,
 				6C7A9191135D19C2007E530E /* WSKSOAPEncoder.h in Headers */,
 				6C7A9195135D19C2007E530E /* WSKSoapService.h in Headers */,
+				6C714DA81378F40B00E1E68A /* WSKSoapRequest.h in Headers */,
 				6C9171761364B1BE0031FCBB /* WSKSoapResponse.h in Headers */,
 				6C9171C7136678020031FCBB /* WSKSoapFault.h in Headers */,
 				6CFDA8E9135A3D0900263F26 /* WSKResponse.h in Headers */,
 				6C917172136377980031FCBB /* NSXMLElement+WebServiceKit.h in Headers */,
-				6C714DA81378F40B00E1E68A /* WSKSoapRequest.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

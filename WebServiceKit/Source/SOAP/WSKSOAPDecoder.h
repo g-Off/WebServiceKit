@@ -18,7 +18,7 @@
 
 - (id)initWithRootObject:(NSXMLElement *)element;
 
-+ (void)setClass:(Class)cls forElementName:(NSString *)elementName withNamespace:(NSString *)aNamespace;
-+ (Class)classForElementName:(NSString *)elementName withNamespace:(NSString *)aNamespace;
++ (void)setClass:(Class)cls forName:(NSString *)elementName withNamespace:(NSString *)aNamespace;
++ (Class)classForName:(NSString *)elementName withNamespace:(NSString *)aNamespace;
 
 @end

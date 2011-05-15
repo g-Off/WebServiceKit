@@ -22,6 +22,5 @@
 @property (readonly) id result;
 
 - (BOOL)isSOAPFault;
-- (BOOL)hasResult;
 
 @end

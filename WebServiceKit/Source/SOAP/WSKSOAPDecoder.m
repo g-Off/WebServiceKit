@@ -9,6 +9,7 @@
 #import "WSKSOAPDecoder.h"
 #import "WSKSoapService.h"
 #import "WSKSoapFault.h"
+#import "NSXMLElement+WebServiceKit.h"
 
 /*
  Stores a dictionary of dictionaries
@@ -47,7 +48,9 @@ void destructor_soapDecoder()
 + (void)initialize
 {
 	if (self == [WSKSOAPDecoder class]) {
-		[self setClass:[WSKSoapFault class] forElementName:@"Fault" withNamespace:WSKSoapEnvelopeURI];
+		[self setClass:[NSString class] forName:@"string" withNamespace:@"http://www.w3.org/2001/XMLSchema"];
+		
+		[self setClass:[WSKSoapFault class] forName:@"Fault" withNamespace:WSKSoap12EnvelopeURI];
 	}
 }
 
@@ -78,7 +81,7 @@ void destructor_soapDecoder()
 	[super dealloc];
 }
 
-+ (void)setClass:(Class)cls forElementName:(NSString *)elementName withNamespace:(NSString *)aNamespace
++ (void)setClass:(Class)cls forName:(NSString *)elementName withNamespace:(NSString *)aNamespace
 {
 	id namespaceKey = aNamespace;
 	if (!aNamespace) {
@@ -95,7 +98,7 @@ void destructor_soapDecoder()
 	[nameToClass setObject:cls forKey:elementName];
 }
 
-+ (Class)classForElementName:(NSString *)elementName withNamespace:(NSString *)aNamespace
++ (Class)classForName:(NSString *)elementName withNamespace:(NSString *)aNamespace
 {
 	Class cls = Nil;
 	
@@ -176,6 +179,8 @@ void destructor_soapDecoder()
 	NSXMLElement *element = [nodeStack lastObject];
 	NSString *xsiType = [self xsiTypeForElement:element];
 	
+	Class cls = Nil;
+	
 	if (xsiType) {
 		NSString *typePrefix = nil;
 		NSString *type = nil;
@@ -187,6 +192,9 @@ void destructor_soapDecoder()
 			type = [components objectAtIndex:0];
 		}
 		
+		NSString *namespaceURI = [element wsk_namespaceForPrefix:typePrefix];
+		cls = [[self class] classForName:type withNamespace:namespaceURI];
+		
 		if ([typePrefix isEqualToString:@"xsd"]) {
 			if ([type isEqualToString:@"string"]) {
 				obj = [[element stringValue] copyWithZone:[self objectZone]];
@@ -194,10 +202,13 @@ void destructor_soapDecoder()
 		}
 		
 	} else {
-		Class cls = [self classForElement:element];
-		if (cls) {
-			obj = [[cls allocWithZone:[self objectZone]] initWithCoder:self];
-		}
+		cls = [self classForElement:element];
+	}
+	
+	if ([cls conformsToProtocol:@protocol(NSCoding)]) {
+		obj = [[cls allocWithZone:[self objectZone]] initWithCoder:self];
+	} else {
+		obj = [[cls allocWithZone:[self objectZone]] init];
 	}
 	
 	return [obj autorelease];
@@ -234,7 +245,7 @@ void destructor_soapDecoder()
 	Class cls = Nil;
 	
 	if (!cls) {
-		cls = [[self class] classForElementName:[element localName] withNamespace:[element URI]];
+		cls = [[self class] classForName:[element localName] withNamespace:[element URI]];
 	}
 	
 	return cls;

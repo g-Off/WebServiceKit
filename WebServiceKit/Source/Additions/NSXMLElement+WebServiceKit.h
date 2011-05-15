@@ -11,6 +11,8 @@
 
 @interface NSXMLElement (WebServiceKit)
 
-+ (id)elementWithName:(NSString *)name prefix:(NSString *)prefix URI:(NSString *)uri;
++ (id)wsk_elementWithName:(NSString *)name prefix:(NSString *)prefix URI:(NSString *)uri;
+
+- (NSString *)wsk_namespaceForPrefix:(NSString *)prefix;
 
 @end

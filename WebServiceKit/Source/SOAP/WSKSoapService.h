@@ -9,11 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <WebServiceKit/WSKService.h>
 
-extern NSString * const WSKSoapEnvelopeURI;
-extern NSString * const WSKSoapEncodingURI;
+extern NSString * const WSKSoap12EnvelopeURI;
+extern NSString * const WSKSoap12EncodingURI;
 extern NSString * const WSKSoapRPCURI;
-
-@class WSKRequest;
 
 @interface WSKSoapService : WSKService {
 @private
@@ -27,10 +25,9 @@ extern NSString * const WSKSoapRPCURI;
 
 - (void)addURI:(NSString *)uri forNamespace:(NSString *)ns;
 
+// TODO: need requestWithAction that has a namespace variant
 - (WSKRequest *)requestWithAction:(NSString *)action withObjects:(NSArray *)objects andKeys:(NSArray *)keys;
 - (WSKRequest *)requestWithAction:(NSString *)action withObjects:(const id [])objects andKeys:(const id [])keys count:(NSUInteger)cnt;
 - (WSKRequest *)requestWithAction:(NSString *)action withArgumentsAndKeys:(id)firstObject, ... NS_REQUIRES_NIL_TERMINATION;
-
-- (void)performRequest:(WSKRequest *)request;
 
 @end

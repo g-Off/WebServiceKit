@@ -14,3 +14,5 @@
 #import <WebServiceKit/WSKSOAPEncoder.h>
 #import <WebServiceKit/WSKSOAPDecoder.h>
 #import <WebServiceKit/WSKSoapFault.h>
+#import <WebServiceKit/WSKSoapRequest.h>
+#import <WebServiceKit/WSKSoapResponse.h>

@@ -23,8 +23,10 @@
 - (id)initWithElement:(NSXMLElement *)element
 {
 	if ((self = [super init])) {
-		faultCode;
-		faultString;
+		NSXMLElement *faultCodeElement = [[element elementsForName:@"faultcode"] lastObject];
+		NSXMLElement *faultStringElement = [[element elementsForName:@"faultstring"] lastObject];
+		faultCode = [[faultCodeElement stringValue] copy];
+		faultString = [[faultStringElement stringValue] copy];
 	}
 	
 	return self;
@@ -48,10 +50,10 @@
 		NSError *parseError = nil;
 		soapDocument = [[NSXMLDocument alloc] initWithData:data options:0 error:&parseError];
 		NSXMLElement *rootElement = [soapDocument rootElement];
-		NSXMLElement *body = (NSXMLElement *)[[rootElement elementsForLocalName:@"Body" URI:WSKSoapEnvelopeURI] lastObject];
+		NSXMLElement *body = (NSXMLElement *)[[rootElement elementsForLocalName:@"Body" URI:WSKSoap12EnvelopeURI] lastObject];
 		NSLog(@"%@", body);
 		
-		NSXMLElement *faultElement = [[body elementsForLocalName:@"Fault" URI:WSKSoapEnvelopeURI] lastObject];
+		NSXMLElement *faultElement = [[body elementsForLocalName:@"Fault" URI:WSKSoap12EnvelopeURI] lastObject];
 		if (faultElement) {
 			fault = [[WSKSoapFault alloc] initWithElement:faultElement];
 		} else {
@@ -94,7 +96,7 @@
 
 - (BOOL)isSOAPFault
 {
-	return (fault == nil);
+	return (fault != nil);
 }
 
 - (WSKSoapRequest *)soapRequest

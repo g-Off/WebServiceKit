@@ -13,8 +13,8 @@
 
 #import "NSXMLElement+WebServiceKit.h"
 
-NSString * const WSKSoapEnvelopeURI = @"http://www.w3.org/2003/05/soap-envelope";
-NSString * const WSKSoapEncodingURI = @"http://www.w3.org/2003/05/soap-encoding";
+NSString * const WSKSoap12EnvelopeURI = @"http://www.w3.org/2003/05/soap-envelope";
+NSString * const WSKSoap12EncodingURI = @"http://www.w3.org/2003/05/soap-encoding";
 NSString * const WSKSoapRPCURI = @"http://www.w3.org/2003/05/soap-rpc";
 NSString * const WSKSoapEnvelopePrefix = @"env";
 
@@ -50,8 +50,8 @@ NSString * const WSKSoapEnvelopePrefix = @"env";
 
 - (NSXMLDocument *)packageElementInEnvelope:(NSXMLElement *)element
 {
-	NSXMLElement *envelope = [NSXMLElement elementWithName:@"Envelope" prefix:WSKSoapEnvelopePrefix URI:WSKSoapEnvelopeURI];
-	NSXMLNode *soapNamespace = [NSXMLNode namespaceWithName:WSKSoapEnvelopePrefix stringValue:WSKSoapEnvelopeURI];
+	NSXMLElement *envelope = [NSXMLElement wsk_elementWithName:@"Envelope" prefix:WSKSoapEnvelopePrefix URI:WSKSoap12EnvelopeURI];
+	NSXMLNode *soapNamespace = [NSXMLNode namespaceWithName:WSKSoapEnvelopePrefix stringValue:WSKSoap12EnvelopeURI];
 	[envelope addNamespace:soapNamespace];
 	[envelope addNamespace:[NSXMLNode predefinedNamespaceForPrefix:@"xsi"]];
 	[envelope addNamespace:[NSXMLNode predefinedNamespaceForPrefix:@"xs"]];
@@ -60,8 +60,8 @@ NSString * const WSKSoapEnvelopePrefix = @"env";
 		[envelope addNamespace:[NSXMLNode namespaceWithName:key stringValue:obj]];
 	}];
 	
-	NSXMLElement *header = [NSXMLElement elementWithName:@"Header" prefix:WSKSoapEnvelopePrefix URI:WSKSoapEnvelopeURI];
-	NSXMLElement *body = [NSXMLElement elementWithName:@"Body" prefix:WSKSoapEnvelopePrefix URI:WSKSoapEnvelopeURI];
+	NSXMLElement *header = [NSXMLElement wsk_elementWithName:@"Header" prefix:WSKSoapEnvelopePrefix URI:WSKSoap12EnvelopeURI];
+	NSXMLElement *body = [NSXMLElement wsk_elementWithName:@"Body" prefix:WSKSoapEnvelopePrefix URI:WSKSoap12EnvelopeURI];
 	[body addChild:element];
 	
 	[envelope addChild:header];
@@ -147,19 +147,6 @@ NSString * const WSKSoapEnvelopePrefix = @"env";
 	va_end(args);
 	
 	return [self requestWithAction:action withObjects:objects andKeys:keys];
-}
-
-- (void)performRequest:(WSKRequest *)request
-{
-#if NS_BLOCKS_AVAILABLE
-	[request setResponseHandler:^(WSKRequest *request, WSKResponse *response) {
-		NSLog(@"hello!!");
-	}];
-#else
-	[request setDelegate:self];
-#endif
-	
-	[self sendRequest:request];
 }
 
 @end
