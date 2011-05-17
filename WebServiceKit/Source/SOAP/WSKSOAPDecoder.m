@@ -49,6 +49,7 @@ void destructor_soapDecoder()
 {
 	if (self == [WSKSOAPDecoder class]) {
 		[self setClass:[NSString class] forName:@"string" withNamespace:@"http://www.w3.org/2001/XMLSchema"];
+		[self setClass:[NSMutableArray class] forName:@"Array" withNamespace:WSKSoap12EncodingURI];
 		
 		[self setClass:[WSKSoapFault class] forName:@"Fault" withNamespace:WSKSoap12EnvelopeURI];
 	}
@@ -195,17 +196,26 @@ void destructor_soapDecoder()
 		NSString *namespaceURI = [element wsk_namespaceForPrefix:typePrefix];
 		cls = [[self class] classForName:type withNamespace:namespaceURI];
 		
-		if ([typePrefix isEqualToString:@"xsd"]) {
-			if ([type isEqualToString:@"string"]) {
-				obj = [[element stringValue] copyWithZone:[self objectZone]];
-			}
-		}
-		
 	} else {
 		cls = [self classForElement:element];
 	}
 	
-	if ([cls conformsToProtocol:@protocol(NSCoding)]) {
+	if ([cls isSubclassOfClass:[NSString class]]) {
+		obj = [[element stringValue] copyWithZone:[self objectZone]];
+	} else if ([cls isSubclassOfClass:[NSNumber class]]) {
+		
+	} else if ([cls isSubclassOfClass:[NSMutableArray class]]) {
+		NSXMLNode *arraySizeAttribute = [element attributeForLocalName:@"arraySize" URI:WSKSoap12EncodingURI];
+		NSUInteger arraySize = arraySizeAttribute ? [[arraySizeAttribute stringValue] integerValue] : 1;
+		NSMutableArray *array = [NSMutableArray arrayWithCapacity:arraySize];
+		for (NSXMLElement *child in [element children]) {
+			[nodeStack addObject:child];
+			id childObj = [self decodeObject];
+			[array addObject:childObj];
+			[nodeStack removeLastObject];
+		}
+		obj = [array copyWithZone:[self objectZone]];
+	} else if ([cls conformsToProtocol:@protocol(NSCoding)]) {
 		obj = [[cls allocWithZone:[self objectZone]] initWithCoder:self];
 	} else {
 		obj = [[cls allocWithZone:[self objectZone]] init];
@@ -244,8 +254,9 @@ void destructor_soapDecoder()
 {
 	Class cls = Nil;
 	
+	cls = [[self class] classForName:[element localName] withNamespace:[element URI]];
 	if (!cls) {
-		cls = [[self class] classForName:[element localName] withNamespace:[element URI]];
+		cls = [[self class] classForName:[[element localName] lowercaseString] withNamespace:[element URI]];
 	}
 	
 	return cls;
