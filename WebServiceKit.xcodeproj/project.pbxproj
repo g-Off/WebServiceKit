@@ -52,9 +52,9 @@
 		6CFDA885135A2E4F00263F26 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		6CFDA886135A2E4F00263F26 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		6CFDA887135A2E4F00263F26 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		6CFDA88A135A2E4F00263F26 /* WebServiceKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WebServiceKit-Info.plist"; sourceTree = "<group>"; };
+		6CFDA88A135A2E4F00263F26 /* WebServiceKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WebServiceKit-Info.plist"; sourceTree = SOURCE_ROOT; };
 		6CFDA88C135A2E4F00263F26 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6CFDA88E135A2E4F00263F26 /* WebServiceKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WebServiceKit-Prefix.pch"; sourceTree = "<group>"; };
+		6CFDA88E135A2E4F00263F26 /* WebServiceKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WebServiceKit-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		6CFDA8DF135A3D0900263F26 /* WebServiceKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebServiceKit.h; sourceTree = "<group>"; };
 		6CFDA8E0135A3D0900263F26 /* WSKRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSKRequest.h; sourceTree = "<group>"; };
 		6CFDA8E1135A3D0900263F26 /* WSKRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSKRequest.m; sourceTree = "<group>"; };
@@ -173,7 +173,7 @@
 				6C7A9186135D19C2007E530E /* SOAP */,
 			);
 			path = Source;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -280,7 +280,7 @@
 				6CFDA88C135A2E4F00263F26 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXVariantGroup section */
 
