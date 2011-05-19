@@ -11,6 +11,12 @@
 #import "WSKSoapFault.h"
 #import "NSXMLElement+WebServiceKit.h"
 
+#import "ISO8601DateFormatter.h"
+
+static ISO8601DateFormatter * kWSKSoapDecoderDateFormatter = nil;
+
+static NSString * const kWSKSoapDecoderXSDNS = @"http://www.w3.org/2001/XMLSchema";
+
 /*
  Stores a dictionary of dictionaries
  namespace --> elementName --> Class
@@ -18,20 +24,25 @@
 static NSMutableDictionary *classMapping;
 
 __attribute__((constructor))
-void constructor_soapDecoder()
+static void constructor_soapDecoder()
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	classMapping = [[NSMutableDictionary alloc] init];
 	
+	kWSKSoapDecoderDateFormatter = [[ISO8601DateFormatter alloc] init];
+	
 	[pool drain];
 }
 
 __attribute__((destructor))
-void destructor_soapDecoder()
+static void destructor_soapDecoder()
 {
 	[classMapping release];
 	classMapping = nil;
+	
+	[kWSKSoapDecoderDateFormatter release];
+	kWSKSoapDecoderDateFormatter = nil;
 }
 
 @interface WSKSOAPDecoder ()
@@ -48,7 +59,8 @@ void destructor_soapDecoder()
 + (void)initialize
 {
 	if (self == [WSKSOAPDecoder class]) {
-		[self setClass:[NSString class] forName:@"string" withNamespace:@"http://www.w3.org/2001/XMLSchema"];
+		[self setClass:[NSString class] forName:@"string" withNamespace:kWSKSoapDecoderXSDNS];
+		[self setClass:[NSDate class] forName:@"dateTime" withNamespace:kWSKSoapDecoderXSDNS];
 		[self setClass:[NSMutableArray class] forName:@"Array" withNamespace:WSKSoap12EncodingURI];
 		
 		[self setClass:[WSKSoapFault class] forName:@"Fault" withNamespace:WSKSoap12EnvelopeURI];
@@ -204,6 +216,8 @@ void destructor_soapDecoder()
 		obj = [[element stringValue] copyWithZone:[self objectZone]];
 	} else if ([cls isSubclassOfClass:[NSNumber class]]) {
 		
+	} else if ([cls isSubclassOfClass:[NSDate class]]) {
+		obj = [[kWSKSoapDecoderDateFormatter dateFromString:[element stringValue]] retain];
 	} else if ([cls isSubclassOfClass:[NSMutableArray class]]) {
 		NSXMLNode *arraySizeAttribute = [element attributeForLocalName:@"arraySize" URI:WSKSoap12EncodingURI];
 		NSUInteger arraySize = arraySizeAttribute ? [[arraySizeAttribute stringValue] integerValue] : 1;

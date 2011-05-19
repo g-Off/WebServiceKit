@@ -21,6 +21,8 @@
 		6C9171771364B1BE0031FCBB /* WSKSoapResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9171751364B1BE0031FCBB /* WSKSoapResponse.m */; };
 		6C9171C7136678020031FCBB /* WSKSoapFault.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C9171C5136678020031FCBB /* WSKSoapFault.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C9171C8136678020031FCBB /* WSKSoapFault.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9171C6136678020031FCBB /* WSKSoapFault.m */; };
+		6CF7A5331384D94F00BBE917 /* ISO8601DateFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CF7A52F1384D94F00BBE917 /* ISO8601DateFormatter.h */; };
+		6CF7A5341384D94F00BBE917 /* ISO8601DateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF7A5301384D94F00BBE917 /* ISO8601DateFormatter.m */; };
 		6CFDA883135A2E4F00263F26 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CFDA882135A2E4F00263F26 /* Cocoa.framework */; };
 		6CFDA88D135A2E4F00263F26 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6CFDA88B135A2E4F00263F26 /* InfoPlist.strings */; };
 		6CFDA8E6135A3D0900263F26 /* WebServiceKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CFDA8DF135A3D0900263F26 /* WebServiceKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -47,6 +49,10 @@
 		6C9171751364B1BE0031FCBB /* WSKSoapResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSKSoapResponse.m; sourceTree = "<group>"; };
 		6C9171C5136678020031FCBB /* WSKSoapFault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSKSoapFault.h; sourceTree = "<group>"; };
 		6C9171C6136678020031FCBB /* WSKSoapFault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSKSoapFault.m; sourceTree = "<group>"; };
+		6CF7A52F1384D94F00BBE917 /* ISO8601DateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISO8601DateFormatter.h; sourceTree = "<group>"; };
+		6CF7A5301384D94F00BBE917 /* ISO8601DateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISO8601DateFormatter.m; sourceTree = "<group>"; };
+		6CF7A5311384D94F00BBE917 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		6CF7A5321384D94F00BBE917 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		6CFDA87F135A2E4F00263F26 /* WebServiceKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WebServiceKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CFDA882135A2E4F00263F26 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		6CFDA885135A2E4F00263F26 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -104,6 +110,25 @@
 			path = Additions;
 			sourceTree = "<group>";
 		};
+		6CF7A52D1384D94F00BBE917 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				6CF7A52E1384D94F00BBE917 /* ISO-8601-parser-0.5 */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		6CF7A52E1384D94F00BBE917 /* ISO-8601-parser-0.5 */ = {
+			isa = PBXGroup;
+			children = (
+				6CF7A52F1384D94F00BBE917 /* ISO8601DateFormatter.h */,
+				6CF7A5301384D94F00BBE917 /* ISO8601DateFormatter.m */,
+				6CF7A5311384D94F00BBE917 /* LICENSE.txt */,
+				6CF7A5321384D94F00BBE917 /* README.txt */,
+			);
+			path = "ISO-8601-parser-0.5";
+			sourceTree = "<group>";
+		};
 		6CFDA873135A2E4F00263F26 = {
 			isa = PBXGroup;
 			children = (
@@ -144,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				6CFDA8DE135A3D0900263F26 /* Source */,
+				6CF7A52D1384D94F00BBE917 /* Libraries */,
 				6CFDA889135A2E4F00263F26 /* Supporting Files */,
 			);
 			path = WebServiceKit;
@@ -193,6 +219,7 @@
 				6C9171C7136678020031FCBB /* WSKSoapFault.h in Headers */,
 				6CFDA8E9135A3D0900263F26 /* WSKResponse.h in Headers */,
 				6C917172136377980031FCBB /* NSXMLElement+WebServiceKit.h in Headers */,
+				6CF7A5331384D94F00BBE917 /* ISO8601DateFormatter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,6 +250,7 @@
 		6CFDA875135A2E4F00263F26 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0410;
 				ORGANIZATIONNAME = "g-Off.net";
 			};
 			buildConfigurationList = 6CFDA878135A2E4F00263F26 /* Build configuration list for PBXProject "WebServiceKit" */;
@@ -268,6 +296,7 @@
 				6C9171771364B1BE0031FCBB /* WSKSoapResponse.m in Sources */,
 				6C9171C8136678020031FCBB /* WSKSoapFault.m in Sources */,
 				6C714DA91378F40B00E1E68A /* WSKSoapRequest.m in Sources */,
+				6CF7A5341384D94F00BBE917 /* ISO8601DateFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,6 +324,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
@@ -310,6 +340,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
