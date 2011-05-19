@@ -116,7 +116,7 @@
 				6CF7A52E1384D94F00BBE917 /* ISO-8601-parser-0.5 */,
 			);
 			path = Libraries;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		6CF7A52E1384D94F00BBE917 /* ISO-8601-parser-0.5 */ = {
 			isa = PBXGroup;
@@ -132,7 +132,9 @@
 		6CFDA873135A2E4F00263F26 = {
 			isa = PBXGroup;
 			children = (
-				6CFDA888135A2E4F00263F26 /* WebServiceKit */,
+				6CFDA8DE135A3D0900263F26 /* Source */,
+				6CF7A52D1384D94F00BBE917 /* Libraries */,
+				6CFDA889135A2E4F00263F26 /* Supporting Files */,
 				6CFDA881135A2E4F00263F26 /* Frameworks */,
 				6CFDA880135A2E4F00263F26 /* Products */,
 			);
@@ -165,16 +167,6 @@
 			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
-		6CFDA888135A2E4F00263F26 /* WebServiceKit */ = {
-			isa = PBXGroup;
-			children = (
-				6CFDA8DE135A3D0900263F26 /* Source */,
-				6CF7A52D1384D94F00BBE917 /* Libraries */,
-				6CFDA889135A2E4F00263F26 /* Supporting Files */,
-			);
-			path = WebServiceKit;
-			sourceTree = "<group>";
-		};
 		6CFDA889135A2E4F00263F26 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -183,6 +175,7 @@
 				6CFDA88E135A2E4F00263F26 /* WebServiceKit-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			path = WebServiceKit;
 			sourceTree = "<group>";
 		};
 		6CFDA8DE135A3D0900263F26 /* Source */ = {
@@ -359,8 +352,8 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "WebServiceKit/WebServiceKit-Prefix.pch";
-				INFOPLIST_FILE = "WebServiceKit/WebServiceKit-Info.plist";
+				GCC_PREFIX_HEADER = "WebServiceKit-Prefix.pch";
+				INFOPLIST_FILE = "WebServiceKit-Info.plist";
 				INSTALL_PATH = "@rpath";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -379,8 +372,8 @@
 				FRAMEWORK_VERSION = A;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "WebServiceKit/WebServiceKit-Prefix.pch";
-				INFOPLIST_FILE = "WebServiceKit/WebServiceKit-Info.plist";
+				GCC_PREFIX_HEADER = "WebServiceKit-Prefix.pch";
+				INFOPLIST_FILE = "WebServiceKit-Info.plist";
 				INSTALL_PATH = "@rpath";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
