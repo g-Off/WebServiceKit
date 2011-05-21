@@ -26,19 +26,34 @@ NSString * const WSKSoapEnvelopePrefix = @"env";
 
 @implementation WSKSoapService
 
+@synthesize serviceURL;
+
 + (WSKSoapService *)serviceWithURL:(NSURL *)aURL
 {
 	return [[[[self class] alloc] initWithServiceURL:aURL] autorelease];
 }
 
+- (id)init
+{
+	return [self initWithServiceURL:nil];
+}
+
 - (id)initWithServiceURL:(NSURL *)aURL
 {
 	if ((self = [super init])) {
-		serviceURL = [aURL retain];
+		self.serviceURL = aURL;
 		namespaces = [[NSMutableDictionary alloc] init];
 	}
 	
 	return self;
+}
+
+- (void)dealloc
+{
+	self.serviceURL = nil;
+	[namespaces release];
+	
+	[super dealloc];
 }
 
 - (void)addURI:(NSString *)uri forNamespace:(NSString *)ns

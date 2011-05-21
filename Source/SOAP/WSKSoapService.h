@@ -19,6 +19,8 @@ extern NSString * const WSKSoapRPCURI;
 	NSMutableDictionary *namespaces;
 }
 
+@property (readwrite, nonatomic, copy) NSURL *serviceURL;
+
 + (WSKSoapService *)serviceWithURL:(NSURL *)aURL;
 
 - (id)initWithServiceURL:(NSURL *)aURL;
