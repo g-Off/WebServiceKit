@@ -52,7 +52,7 @@
 }
 
 #if NS_BLOCKS_AVAILABLE
-- (void)performRequest:(WSKRequest *)request withResponseHandler:(void (^)(WSKRequest *request, WSKResponse *response))handler
+- (void)performRequest:(WSKRequest *)request withResponseHandler:(void (^)(WSKResponse *response))handler
 {
 	[request setResponseHandler:handler];
 	[self sendRequest:request];

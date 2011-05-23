@@ -12,7 +12,7 @@
 @class WSKRequest;
 
 #if NS_BLOCKS_AVAILABLE
-typedef void(^WSKRequestResponseBlock)(WSKRequest *request, WSKResponse *response);
+typedef void(^WSKResponseBlock)(WSKResponse *response);
 #endif
 
 @protocol WSKRequestDelegate <NSObject>
@@ -38,7 +38,7 @@ typedef void(^WSKRequestResponseBlock)(WSKRequest *request, WSKResponse *respons
 	__weak id delegate;
 	
 #if NS_BLOCKS_AVAILABLE
-	WSKRequestResponseBlock responseHandler;
+	WSKResponseBlock responseHandler;
 #endif
 }
 
@@ -48,14 +48,14 @@ typedef void(^WSKRequestResponseBlock)(WSKRequest *request, WSKResponse *respons
 @property (readwrite, nonatomic, assign) id delegate;
 @property (readonly) NSData *responseData;
 #if NS_BLOCKS_AVAILABLE
-@property (readwrite, nonatomic, copy) WSKRequestResponseBlock responseHandler;
+@property (readwrite, nonatomic, copy) WSKResponseBlock responseHandler;
 #endif
 
 + (WSKRequest *)request;
 + (WSKRequest *)requestWithURL:(NSURL *)aURL;
 + (WSKRequest *)requestWithURL:(NSURL *)aURL delegate:(id)aDelegate;
 #if NS_BLOCKS_AVAILABLE
-+ (WSKRequest *)requestWithURL:(NSURL *)aURL responseHandler:(WSKRequestResponseBlock)aResponseHandler;
++ (WSKRequest *)requestWithURL:(NSURL *)aURL responseHandler:(WSKResponseBlock)aResponseHandler;
 #endif
 
 - (id)initWithURL:(NSURL *)aURL;

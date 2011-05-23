@@ -22,7 +22,7 @@
 - (void)performRequest:(WSKRequest *)request target:(id)aTarget action:(SEL)anAction;
 - (void)performRequest:(WSKRequest *)request delegate:(id)aDelegate;
 #if NS_BLOCKS_AVAILABLE
-- (void)performRequest:(WSKRequest *)request withResponseHandler:(void (^)(WSKRequest *request, WSKResponse *response))handler;
+- (void)performRequest:(WSKRequest *)request withResponseHandler:(void (^)(WSKResponse *response))handler;
 #endif
 
 @end

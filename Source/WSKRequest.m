@@ -44,7 +44,7 @@
 }
 
 #if NS_BLOCKS_AVAILABLE
-+ (WSKRequest *)requestWithURL:(NSURL *)aURL responseHandler:(WSKRequestResponseBlock)aResponseHandler
++ (WSKRequest *)requestWithURL:(NSURL *)aURL responseHandler:(WSKResponseBlock)aResponseHandler
 {
 	WSKRequest *request = [self requestWithURL:aURL];
 	[request setResponseHandler:aResponseHandler];
@@ -165,7 +165,7 @@
 {
 #if NS_BLOCKS_AVAILABLE
 	if (responseHandler) {
-		responseHandler(self, response);
+		responseHandler(response);
 	} else
 #endif
 	{
