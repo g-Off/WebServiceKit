@@ -134,11 +134,13 @@
 	}
 	
 	if ([objv isKindOfClass:[NSString class]] ||
-		[objv isKindOfClass:[NSNumber class]] ||
 		[objv isKindOfClass:[NSCalendarDate class]] ||
 		[objv isKindOfClass:[NSData class]] ||
 		[objv isKindOfClass:[NSURL class]]) {
 		[element setObjectValue:objv];
+	} else if ([objv isKindOfClass:[NSNumber class]]) {
+		NSNumber *number = (NSNumber *)objv;
+		[element setStringValue:[number stringValue]];
 	} else if ([objv isKindOfClass:[NSArray class]]) {
 		
 	} else if ([objv conformsToProtocol:@protocol(NSCoding)]) {
