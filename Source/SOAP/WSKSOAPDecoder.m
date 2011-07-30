@@ -225,7 +225,9 @@ static void destructor_soapDecoder()
 		for (NSXMLElement *child in [element children]) {
 			[nodeStack addObject:child];
 			id childObj = [self decodeObject];
-			[array addObject:childObj];
+			if (childObj) {
+				[array addObject:childObj];
+			}
 			[nodeStack removeLastObject];
 		}
 		obj = [array copyWithZone:[self objectZone]];
@@ -240,28 +242,11 @@ static void destructor_soapDecoder()
 
 - (id)decodeObjectForKey:(NSString *)key
 {
-	/*
-	 this can probably be replaced by the following:
-	 NSXMLNode *node = [self nodeForKey:key];
-	 [nodeStack addObject:node];
-	 id obj = [self decodeObject];
-	 [nodeStack removeLastObject];
-	 return obj;
-	 */
-	
-	id obj = nil;
-	
 	NSXMLNode *node = [self nodeForKey:key];
-	Class cls = [self classForElement:(NSXMLElement *)node];
-	if (cls) {
-		[nodeStack addObject:node];
-		obj = [[cls allocWithZone:[self objectZone]] initWithCoder:self];
-		[nodeStack removeLastObject];
-	} else {
-		obj = [[node stringValue] copyWithZone:[self objectZone]];
-	}
-	
-	return [obj autorelease];
+	[nodeStack addObject:node];
+	id obj = [self decodeObject];
+	[nodeStack removeLastObject];
+	return obj;
 }
 
 - (Class)classForElement:(NSXMLElement *)element
