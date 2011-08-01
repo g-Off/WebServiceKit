@@ -21,6 +21,10 @@
 		6C9171771364B1BE0031FCBB /* WSKSoapResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9171751364B1BE0031FCBB /* WSKSoapResponse.m */; };
 		6C9171C7136678020031FCBB /* WSKSoapFault.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C9171C5136678020031FCBB /* WSKSoapFault.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C9171C8136678020031FCBB /* WSKSoapFault.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9171C6136678020031FCBB /* WSKSoapFault.m */; };
+		6CDA838613E6067E0008221C /* WSKKeyedArchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CDA838413E6067E0008221C /* WSKKeyedArchiver.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6CDA838713E6067E0008221C /* WSKKeyedArchiver.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDA838513E6067E0008221C /* WSKKeyedArchiver.m */; };
+		6CDA838B13E629160008221C /* WSKKeyedUnarchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CDA838913E629150008221C /* WSKKeyedUnarchiver.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6CDA838C13E629160008221C /* WSKKeyedUnarchiver.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDA838A13E629150008221C /* WSKKeyedUnarchiver.m */; };
 		6CF7A5331384D94F00BBE917 /* ISO8601DateFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CF7A52F1384D94F00BBE917 /* ISO8601DateFormatter.h */; };
 		6CF7A5341384D94F00BBE917 /* ISO8601DateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CF7A5301384D94F00BBE917 /* ISO8601DateFormatter.m */; };
 		6CFDA883135A2E4F00263F26 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CFDA882135A2E4F00263F26 /* Cocoa.framework */; };
@@ -49,6 +53,10 @@
 		6C9171751364B1BE0031FCBB /* WSKSoapResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSKSoapResponse.m; sourceTree = "<group>"; };
 		6C9171C5136678020031FCBB /* WSKSoapFault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSKSoapFault.h; sourceTree = "<group>"; };
 		6C9171C6136678020031FCBB /* WSKSoapFault.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSKSoapFault.m; sourceTree = "<group>"; };
+		6CDA838413E6067E0008221C /* WSKKeyedArchiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSKKeyedArchiver.h; sourceTree = "<group>"; };
+		6CDA838513E6067E0008221C /* WSKKeyedArchiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSKKeyedArchiver.m; sourceTree = "<group>"; };
+		6CDA838913E629150008221C /* WSKKeyedUnarchiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSKKeyedUnarchiver.h; sourceTree = "<group>"; };
+		6CDA838A13E629150008221C /* WSKKeyedUnarchiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSKKeyedUnarchiver.m; sourceTree = "<group>"; };
 		6CF7A52F1384D94F00BBE917 /* ISO8601DateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISO8601DateFormatter.h; sourceTree = "<group>"; };
 		6CF7A5301384D94F00BBE917 /* ISO8601DateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISO8601DateFormatter.m; sourceTree = "<group>"; };
 		6CF7A5311384D94F00BBE917 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
@@ -189,6 +197,10 @@
 				6CFDA8E1135A3D0900263F26 /* WSKRequest.m */,
 				6CFDA8E2135A3D0900263F26 /* WSKResponse.h */,
 				6CFDA8E3135A3D0900263F26 /* WSKResponse.m */,
+				6CDA838413E6067E0008221C /* WSKKeyedArchiver.h */,
+				6CDA838513E6067E0008221C /* WSKKeyedArchiver.m */,
+				6CDA838913E629150008221C /* WSKKeyedUnarchiver.h */,
+				6CDA838A13E629150008221C /* WSKKeyedUnarchiver.m */,
 				6C7A9186135D19C2007E530E /* SOAP */,
 			);
 			path = Source;
@@ -211,6 +223,8 @@
 				6C9171761364B1BE0031FCBB /* WSKSoapResponse.h in Headers */,
 				6C9171C7136678020031FCBB /* WSKSoapFault.h in Headers */,
 				6CFDA8E9135A3D0900263F26 /* WSKResponse.h in Headers */,
+				6CDA838613E6067E0008221C /* WSKKeyedArchiver.h in Headers */,
+				6CDA838B13E629160008221C /* WSKKeyedUnarchiver.h in Headers */,
 				6C917172136377980031FCBB /* NSXMLElement+WebServiceKit.h in Headers */,
 				6CF7A5331384D94F00BBE917 /* ISO8601DateFormatter.h in Headers */,
 			);
@@ -243,7 +257,7 @@
 		6CFDA875135A2E4F00263F26 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0410;
+				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = "g-Off.net";
 			};
 			buildConfigurationList = 6CFDA878135A2E4F00263F26 /* Build configuration list for PBXProject "WebServiceKit" */;
@@ -290,6 +304,8 @@
 				6C9171C8136678020031FCBB /* WSKSoapFault.m in Sources */,
 				6C714DA91378F40B00E1E68A /* WSKSoapRequest.m in Sources */,
 				6CF7A5341384D94F00BBE917 /* ISO8601DateFormatter.m in Sources */,
+				6CDA838713E6067E0008221C /* WSKKeyedArchiver.m in Sources */,
+				6CDA838C13E629160008221C /* WSKKeyedUnarchiver.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

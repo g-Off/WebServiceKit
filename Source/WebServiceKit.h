@@ -16,3 +16,6 @@
 #import <WebServiceKit/WSKSoapFault.h>
 #import <WebServiceKit/WSKSoapRequest.h>
 #import <WebServiceKit/WSKSoapResponse.h>
+
+#import <WebServiceKit/WSKKeyedArchiver.h>
+#import <WebServiceKit/WSKKeyedUnarchiver.h>
