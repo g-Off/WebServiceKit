@@ -25,8 +25,20 @@
 	if ((self = [super init])) {
 		NSXMLElement *faultCodeElement = [[element elementsForName:@"faultcode"] lastObject];
 		NSXMLElement *faultStringElement = [[element elementsForName:@"faultstring"] lastObject];
-		faultCode = [[faultCodeElement stringValue] copy];
-		faultString = [[faultStringElement stringValue] copy];
+		
+		if (faultCodeElement || faultStringElement) {
+			faultCode = [[faultCodeElement stringValue] copy];
+			faultString = [[faultStringElement stringValue] copy];
+		} else {
+			NSString *uri = [element URI];
+			faultCodeElement = [[element elementsForLocalName:@"Code" URI:uri] lastObject];
+			NSXMLElement *faultCodeValueElement = [[faultCodeElement elementsForLocalName:@"Value" URI:uri] lastObject];
+			NSXMLElement *faultReasonElement = [[element elementsForLocalName:@"Reason" URI:uri] lastObject];
+			NSXMLElement *faultTextElement = [[faultReasonElement elementsForLocalName:@"Text" URI:uri] lastObject];
+			
+			faultCode = [[faultCodeValueElement stringValue] copy];
+			faultString = [[faultTextElement stringValue] copy];
+		}
 	}
 	
 	return self;
