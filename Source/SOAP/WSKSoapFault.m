@@ -11,6 +11,9 @@
 
 @implementation WSKSoapFault
 
+@synthesize faultCode;
+@synthesize faultString;
+
 - (id)init
 {
 	if ((self = [super init])) {

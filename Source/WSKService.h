@@ -11,6 +11,8 @@
 @class WSKRequest;
 @class WSKResponse;
 
+typedef void(^WSKServiceHandler)(WSKResponse *response);
+
 @interface WSKService : NSObject {
 @private
     NSOperationQueue *requestQueue;
@@ -22,7 +24,7 @@
 - (void)performRequest:(WSKRequest *)request target:(id)aTarget action:(SEL)anAction;
 - (void)performRequest:(WSKRequest *)request delegate:(id)aDelegate;
 #if NS_BLOCKS_AVAILABLE
-- (void)performRequest:(WSKRequest *)request withResponseHandler:(void (^)(WSKResponse *response))handler;
+- (void)performRequest:(WSKRequest *)request withResponseHandler:(WSKServiceHandler)handler;
 #endif
 
 @end

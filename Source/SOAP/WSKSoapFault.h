@@ -15,4 +15,7 @@
 	NSString *faultString;
 }
 
+@property (readonly) NSString *faultCode;
+@property (readonly) NSString *faultString;
+
 @end

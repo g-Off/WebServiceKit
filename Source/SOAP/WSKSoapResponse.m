@@ -34,6 +34,8 @@
 			faultCodeElement = [[element elementsForLocalName:@"Code" URI:uri] lastObject];
 			NSXMLElement *faultCodeValueElement = [[faultCodeElement elementsForLocalName:@"Value" URI:uri] lastObject];
 			NSXMLElement *faultReasonElement = [[element elementsForLocalName:@"Reason" URI:uri] lastObject];
+			
+			// TODO: extract localized string from soapenv:Text element (xml:lang="en")
 			NSXMLElement *faultTextElement = [[faultReasonElement elementsForLocalName:@"Text" URI:uri] lastObject];
 			
 			faultCode = [[faultCodeValueElement stringValue] copy];
@@ -55,6 +57,7 @@
 @implementation WSKSoapResponse
 
 @synthesize result;
+@synthesize fault;
 
 - (id)initWithRequest:(WSKRequest *)aRequest
 {

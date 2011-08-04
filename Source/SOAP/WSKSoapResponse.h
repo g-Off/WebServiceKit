@@ -20,6 +20,7 @@
 }
 
 @property (readonly) id result;
+@property (readonly) WSKSoapFault *fault;
 
 - (BOOL)isSOAPFault;
 

@@ -10,6 +10,7 @@
 #import "WSKSOAPEncoder.h"
 #import "WSKSoapRequest.h"
 #import "WSKSoapResponse.h"
+#import "WSKSoapFault.h"
 
 #import "NSXMLElement+WebServiceKit.h"
 
@@ -17,6 +18,9 @@ NSString * const WSKSoap12EnvelopeURI = @"http://www.w3.org/2003/05/soap-envelop
 NSString * const WSKSoap12EncodingURI = @"http://www.w3.org/2003/05/soap-encoding";
 NSString * const WSKSoapRPCURI = @"http://www.w3.org/2003/05/soap-rpc";
 NSString * const WSKSoapEnvelopePrefix = @"env";
+
+NSString * const WSKSoapErrorDomain = @"WSKSoapErrorDomain";
+NSString * const WSKSoapFaultKey = @"WSKSoapFaultKey";
 
 @interface WSKSoapService () <WSKRequestDelegate>
 
@@ -97,7 +101,7 @@ NSString * const WSKSoapEnvelopePrefix = @"env";
 	
 }
 
-- (WSKRequest *)requestWithAction:(NSString *)action withObjects:(NSArray *)objects andKeys:(NSArray *)keys
+- (WSKSoapRequest *)requestWithAction:(NSString *)action withObjects:(NSArray *)objects andKeys:(NSArray *)keys
 {
 	NSAssert([objects count] == [keys count], @"Mismatched size of keys and objects");
 	
@@ -125,7 +129,7 @@ NSString * const WSKSoapEnvelopePrefix = @"env";
 	NSLog(@"%@", envelope);
 	NSData *body = [envelope XMLData];
 	
-	WSKRequest *request = [WSKSoapRequest requestWithAction:action URL:serviceURL];
+	WSKSoapRequest *request = [WSKSoapRequest requestWithAction:action URL:serviceURL];
 	[request setResponseClass:[WSKSoapResponse class]];
 	NSMutableURLRequest *urlRequest = [request urlRequest];
 	[urlRequest setCachePolicy:NSURLRequestReloadIgnoringCacheData];
@@ -138,12 +142,12 @@ NSString * const WSKSoapEnvelopePrefix = @"env";
 	return request;
 }
 
-- (WSKRequest *)requestWithAction:(NSString *)action withObjects:(const id [])objects andKeys:(const id [])keys count:(NSUInteger)cnt
+- (WSKSoapRequest *)requestWithAction:(NSString *)action withObjects:(const id [])objects andKeys:(const id [])keys count:(NSUInteger)cnt
 {
 	return [self requestWithAction:action withObjects:[NSArray arrayWithObjects:objects count:cnt] andKeys:[NSArray arrayWithObjects:keys count:cnt]];
 }
 
-- (WSKRequest *)requestWithAction:(NSString *)action withArgumentsAndKeys:(id)firstObject, ...
+- (WSKSoapRequest *)requestWithAction:(NSString *)action withArgumentsAndKeys:(id)firstObject, ...
 {
 	NSMutableArray *objects = [NSMutableArray array];
 	NSMutableArray *keys = [NSMutableArray array];
@@ -163,5 +167,33 @@ NSString * const WSKSoapEnvelopePrefix = @"env";
 	
 	return [self requestWithAction:action withObjects:objects andKeys:keys];
 }
+
+#if NS_BLOCKS_AVAILABLE
+
+- (void)performRequest:(WSKSoapRequest *)request withSoapResponseHandler:(WSKSoapResponseHandler)soapHandler
+{
+	WSKServiceHandler requestHandler = ^(WSKResponse *response) {
+		WSKSoapResponse *soapResponse = (WSKSoapResponse *)response;
+		id obj = nil;
+		NSError *error = nil;
+		
+		if ([soapResponse isSOAPFault]) {
+			NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+									  soapResponse.fault.faultString, NSLocalizedDescriptionKey,
+									  soapResponse.fault, WSKSoapFaultKey,
+									  nil];
+			// TODO: might need actual error code values
+			error = [NSError errorWithDomain:WSKSoapErrorDomain code:0 userInfo:userInfo];
+		} else {
+			obj = [[[soapResponse result] retain] autorelease];
+		}
+		
+		soapHandler(soapResponse, obj, error);
+	};
+	[request setResponseHandler:requestHandler];
+	[self sendRequest:request];
+}
+
+#endif
 
 @end

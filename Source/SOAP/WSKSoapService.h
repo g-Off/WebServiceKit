@@ -13,6 +13,14 @@ extern NSString * const WSKSoap12EnvelopeURI;
 extern NSString * const WSKSoap12EncodingURI;
 extern NSString * const WSKSoapRPCURI;
 
+extern NSString * const WSKSoapErrorDomain;
+extern NSString * const WSKSoapFaultKey;
+
+@class WSKSoapRequest;
+@class WSKSoapResponse;
+
+typedef void(^WSKSoapResponseHandler)(WSKSoapResponse *response, id obj, NSError *error);
+
 @interface WSKSoapService : WSKService {
 @private
     NSURL *serviceURL;
@@ -28,8 +36,12 @@ extern NSString * const WSKSoapRPCURI;
 - (void)addURI:(NSString *)uri forNamespace:(NSString *)ns;
 
 // TODO: need requestWithAction that has a namespace variant
-- (WSKRequest *)requestWithAction:(NSString *)action withObjects:(NSArray *)objects andKeys:(NSArray *)keys;
-- (WSKRequest *)requestWithAction:(NSString *)action withObjects:(const id [])objects andKeys:(const id [])keys count:(NSUInteger)cnt;
-- (WSKRequest *)requestWithAction:(NSString *)action withArgumentsAndKeys:(id)firstObject, ... NS_REQUIRES_NIL_TERMINATION;
+- (WSKSoapRequest *)requestWithAction:(NSString *)action withObjects:(NSArray *)objects andKeys:(NSArray *)keys;
+- (WSKSoapRequest *)requestWithAction:(NSString *)action withObjects:(const id [])objects andKeys:(const id [])keys count:(NSUInteger)cnt;
+- (WSKSoapRequest *)requestWithAction:(NSString *)action withArgumentsAndKeys:(id)firstObject, ... NS_REQUIRES_NIL_TERMINATION;
+
+#if NS_BLOCKS_AVAILABLE
+- (void)performRequest:(WSKSoapRequest *)request withSoapResponseHandler:(WSKSoapResponseHandler)handler;
+#endif
 
 @end
