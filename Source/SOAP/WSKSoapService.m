@@ -72,8 +72,8 @@ NSString * const WSKSoapFaultKey = @"WSKSoapFaultKey";
 	NSXMLElement *envelope = [NSXMLElement wsk_elementWithName:@"Envelope" prefix:WSKSoapEnvelopePrefix URI:WSKSoap12EnvelopeURI];
 	NSXMLNode *soapNamespace = [NSXMLNode namespaceWithName:WSKSoapEnvelopePrefix stringValue:WSKSoap12EnvelopeURI];
 	[envelope addNamespace:soapNamespace];
-	[envelope addNamespace:[NSXMLNode predefinedNamespaceForPrefix:@"xsi"]];
-	[envelope addNamespace:[NSXMLNode predefinedNamespaceForPrefix:@"xs"]];
+	[envelope addNamespace:[[[NSXMLNode predefinedNamespaceForPrefix:@"xsi"] copy] autorelease]];
+	[envelope addNamespace:[[[NSXMLNode predefinedNamespaceForPrefix:@"xs"] copy] autorelease]];
 	
 	[namespaces enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
 		[envelope addNamespace:[NSXMLNode namespaceWithName:key stringValue:obj]];

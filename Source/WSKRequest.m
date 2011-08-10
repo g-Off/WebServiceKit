@@ -9,6 +9,7 @@
 #import "WSKRequest.h"
 #import "WSKResponse.h"
 
+
 @interface WSKRequest (NSURLConnectionDelegate) <NSURLConnectionDelegate>
 
 - (void)requestFinishedWithResponse:(WSKResponse *)response;
@@ -111,6 +112,7 @@
 	urlConnection = [[NSURLConnection alloc] initWithRequest:urlRequest delegate:self startImmediately:NO];
 	[urlConnection scheduleInRunLoop:[NSRunLoop mainRunLoop]  forMode:NSDefaultRunLoopMode];
 	[urlConnection start];
+	
 	[self willChangeValueForKey:@"isExecuting"];
 	executing = YES;
 	[self didChangeValueForKey:@"isExecuting"];
@@ -121,17 +123,14 @@
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
 	// TODO: handle this case
-	NSLog(@"%s - %@", __PRETTY_FUNCTION__, response);
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-	// TODO: handle this case
-	NSLog(@"%s - %@", __PRETTY_FUNCTION__, error);
-	
 	[self willChangeValueForKey:@"isExecuting"];
 	executing = NO;
 	[self didChangeValueForKey:@"isExecuting"];
+	
 	[self willChangeValueForKey:@"isFinished"];
 	finished = YES;
 	[self didChangeValueForKey:@"isFinished"];
@@ -143,11 +142,10 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-	NSLog(@"%@", [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease]);
-	
 	[self willChangeValueForKey:@"isExecuting"];
 	executing = NO;
 	[self didChangeValueForKey:@"isExecuting"];
+	
 	[self willChangeValueForKey:@"isFinished"];
 	finished = YES;
 	[self didChangeValueForKey:@"isFinished"];
@@ -170,7 +168,7 @@
 #endif
 	{
 		if (delegate && [delegate respondsToSelector:@selector(request:didFinishWithResponse:)]) {
-//			[delegate request:self didFinishWithResponse:response];
+			[delegate request:self didFinishWithResponse:response];
 		}
 	}
 }
