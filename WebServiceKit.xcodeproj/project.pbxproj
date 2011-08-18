@@ -15,6 +15,8 @@
 		6C7A9192135D19C2007E530E /* WSKSOAPEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7A918A135D19C2007E530E /* WSKSOAPEncoder.m */; };
 		6C7A9195135D19C2007E530E /* WSKSoapService.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C7A918D135D19C2007E530E /* WSKSoapService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C7A9196135D19C2007E530E /* WSKSoapService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7A918E135D19C2007E530E /* WSKSoapService.m */; };
+		6C85A5F713FCA9D600DA81E0 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 6C85A5F513FCA9D600DA81E0 /* LICENSE */; };
+		6C85A5F813FCA9D600DA81E0 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 6C85A5F613FCA9D600DA81E0 /* README.md */; };
 		6C917172136377980031FCBB /* NSXMLElement+WebServiceKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C917170136377980031FCBB /* NSXMLElement+WebServiceKit.h */; };
 		6C917173136377980031FCBB /* NSXMLElement+WebServiceKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C917171136377980031FCBB /* NSXMLElement+WebServiceKit.m */; };
 		6C9171761364B1BE0031FCBB /* WSKSoapResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C9171741364B1BE0031FCBB /* WSKSoapResponse.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -47,6 +49,8 @@
 		6C7A918A135D19C2007E530E /* WSKSOAPEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSKSOAPEncoder.m; sourceTree = "<group>"; };
 		6C7A918D135D19C2007E530E /* WSKSoapService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSKSoapService.h; sourceTree = "<group>"; };
 		6C7A918E135D19C2007E530E /* WSKSoapService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WSKSoapService.m; sourceTree = "<group>"; };
+		6C85A5F513FCA9D600DA81E0 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		6C85A5F613FCA9D600DA81E0 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		6C917170136377980031FCBB /* NSXMLElement+WebServiceKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSXMLElement+WebServiceKit.h"; sourceTree = "<group>"; };
 		6C917171136377980031FCBB /* NSXMLElement+WebServiceKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSXMLElement+WebServiceKit.m"; sourceTree = "<group>"; };
 		6C9171741364B1BE0031FCBB /* WSKSoapResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WSKSoapResponse.h; sourceTree = "<group>"; };
@@ -90,6 +94,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6C0AFB5B13F8A1DA005AD357 /* REST */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = REST;
+			sourceTree = "<group>";
+		};
 		6C7A9186135D19C2007E530E /* SOAP */ = {
 			isa = PBXGroup;
 			children = (
@@ -140,6 +151,8 @@
 		6CFDA873135A2E4F00263F26 = {
 			isa = PBXGroup;
 			children = (
+				6C85A5F513FCA9D600DA81E0 /* LICENSE */,
+				6C85A5F613FCA9D600DA81E0 /* README.md */,
 				6CFDA8DE135A3D0900263F26 /* Source */,
 				6CF7A52D1384D94F00BBE917 /* Libraries */,
 				6CFDA889135A2E4F00263F26 /* Supporting Files */,
@@ -201,6 +214,7 @@
 				6CDA838513E6067E0008221C /* WSKKeyedArchiver.m */,
 				6CDA838913E629150008221C /* WSKKeyedUnarchiver.h */,
 				6CDA838A13E629150008221C /* WSKKeyedUnarchiver.m */,
+				6C0AFB5B13F8A1DA005AD357 /* REST */,
 				6C7A9186135D19C2007E530E /* SOAP */,
 			);
 			path = Source;
@@ -283,6 +297,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CFDA88D135A2E4F00263F26 /* InfoPlist.strings in Resources */,
+				6C85A5F713FCA9D600DA81E0 /* LICENSE in Resources */,
+				6C85A5F813FCA9D600DA81E0 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
