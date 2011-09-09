@@ -217,7 +217,10 @@ static void destructor_soapDecoder()
 	} else if ([cls isSubclassOfClass:[NSNumber class]]) {
 		
 	} else if ([cls isSubclassOfClass:[NSDate class]]) {
-		obj = [[kWSKSoapDecoderDateFormatter dateFromString:[element stringValue]] retain];
+		NSString *dateString = [element stringValue];
+		if (dateString && [dateString length] > 0) {
+			obj = [[kWSKSoapDecoderDateFormatter dateFromString:dateString] retain];
+		}
 	} else if ([cls isSubclassOfClass:[NSMutableArray class]]) {
 		NSXMLNode *arraySizeAttribute = [element attributeForLocalName:@"arraySize" URI:WSKSoap12EncodingURI];
 		NSUInteger arraySize = arraySizeAttribute ? [[arraySizeAttribute stringValue] integerValue] : 1;
