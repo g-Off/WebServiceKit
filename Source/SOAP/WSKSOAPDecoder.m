@@ -245,10 +245,13 @@ static void destructor_soapDecoder()
 
 - (id)decodeObjectForKey:(NSString *)key
 {
+	id obj = nil;
 	NSXMLNode *node = [self nodeForKey:key];
-	[nodeStack addObject:node];
-	id obj = [self decodeObject];
-	[nodeStack removeLastObject];
+	if (node) {
+		[nodeStack addObject:node];
+		obj = [self decodeObject];
+		[nodeStack removeLastObject];
+	}
 	return obj;
 }
 
