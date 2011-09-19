@@ -213,7 +213,10 @@ static void destructor_soapDecoder()
 	}
 	
 	if ([cls isSubclassOfClass:[NSString class]]) {
-		obj = [[element stringValue] copyWithZone:[self objectZone]];
+		NSString *stringValue = [element stringValue];
+		if (stringValue && [stringValue length] > 0) {
+			obj = [stringValue copyWithZone:[self objectZone]];
+		}
 	} else if ([cls isSubclassOfClass:[NSNumber class]]) {
 		
 	} else if ([cls isSubclassOfClass:[NSDate class]]) {

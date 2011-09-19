@@ -23,8 +23,7 @@ typedef void(^WSKServiceHandler)(WSKResponse *response);
 - (void)performRequest:(WSKRequest *)request;
 - (void)performRequest:(WSKRequest *)request target:(id)aTarget action:(SEL)anAction;
 - (void)performRequest:(WSKRequest *)request delegate:(id)aDelegate;
-#if NS_BLOCKS_AVAILABLE
+
 - (void)performRequest:(WSKRequest *)request withResponseHandler:(WSKServiceHandler)handler;
-#endif
 
 @end

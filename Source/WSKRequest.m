@@ -9,6 +9,12 @@
 #import "WSKRequest.h"
 #import "WSKResponse.h"
 
+@interface WSKRequest ()
+
+@property (nonatomic, assign, getter = isExecuting) BOOL executing;
+@property (nonatomic, assign, getter = isFinished) BOOL finished;
+
+@end
 
 @interface WSKRequest (NSURLConnectionDelegate) <NSURLConnectionDelegate>
 
@@ -18,40 +24,32 @@
 
 @implementation WSKRequest
 
+@synthesize executing;
+@synthesize finished;
+
 @synthesize url;
 @synthesize responseClass;
 @synthesize urlRequest;
-@synthesize delegate;
 @synthesize responseData;
-#if NS_BLOCKS_AVAILABLE
 @synthesize responseHandler;
-#endif
+@synthesize response;
 
 + (WSKRequest *)request
 {
-	return [[[[self class] alloc] init] autorelease];
+	return [self requestWithURL:nil];
 }
 
 + (WSKRequest *)requestWithURL:(NSURL *)aURL
 {
-	return [[[[self class] alloc] initWithURL:aURL] autorelease];
+	return [self requestWithURL:aURL responseHandler:NULL];
 }
 
-+ (WSKRequest *)requestWithURL:(NSURL *)aURL delegate:(id)aDelegate
-{
-	WSKRequest *request = [self requestWithURL:aURL];
-	[request setDelegate:aDelegate];
-	return request;
-}
-
-#if NS_BLOCKS_AVAILABLE
 + (WSKRequest *)requestWithURL:(NSURL *)aURL responseHandler:(WSKResponseBlock)aResponseHandler
 {
-	WSKRequest *request = [self requestWithURL:aURL];
+	WSKRequest *request = [[[self class] alloc] initWithURL:aURL];
 	[request setResponseHandler:aResponseHandler];
-	return request;
+	return [request autorelease];
 }
-#endif
 
 - (id)init
 {
@@ -67,7 +65,9 @@
 {
 	if ((self = [self init])) {
 		url = [aURL retain];
-		[urlRequest setURL:url];
+		if (url) {
+			[urlRequest setURL:url];
+		}
 	}
 	
 	return self;
@@ -75,25 +75,14 @@
 
 - (void)dealloc
 {
-	delegate = nil;
-	
 	[url release];
 	[responseData release];
 	[urlRequest release];
 	[urlConnection release];
-	
-	delegate = nil;
-	
-#if NS_BLOCKS_AVAILABLE
 	[responseHandler release];
-#endif
+	[response release];
 	
 	[super dealloc];
-}
-
-- (BOOL)isFinished
-{
-	return finished;
 }
 
 - (BOOL)isConcurrent
@@ -101,21 +90,13 @@
 	return YES;
 }
 
-- (BOOL)isExecuting
-{
-	return executing;
-}
-
 - (void)start
 {
+	[self setExecuting:YES];
 	responseData = [[NSMutableData alloc] init];
 	urlConnection = [[NSURLConnection alloc] initWithRequest:urlRequest delegate:self startImmediately:NO];
-	[urlConnection scheduleInRunLoop:[NSRunLoop mainRunLoop]  forMode:NSDefaultRunLoopMode];
+	[urlConnection scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
 	[urlConnection start];
-	
-	[self willChangeValueForKey:@"isExecuting"];
-	executing = YES;
-	[self didChangeValueForKey:@"isExecuting"];
 }
 
 #pragma mark - NSURLConnectionDelegate
@@ -127,31 +108,23 @@
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-	[self willChangeValueForKey:@"isExecuting"];
-	executing = NO;
-	[self didChangeValueForKey:@"isExecuting"];
+	[self setExecuting:NO];
 	
-	[self willChangeValueForKey:@"isFinished"];
-	finished = YES;
-	[self didChangeValueForKey:@"isFinished"];
-	
-	WSKResponse *response = [[[responseClass alloc] init] autorelease];
+	response = [[responseClass alloc] init];
 	[response setError:error];
 	[self requestFinishedWithResponse:response];
+	
+	[self setFinished:YES];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-	[self willChangeValueForKey:@"isExecuting"];
-	executing = NO;
-	[self didChangeValueForKey:@"isExecuting"];
+	[self setExecuting:NO];
 	
-	[self willChangeValueForKey:@"isFinished"];
-	finished = YES;
-	[self didChangeValueForKey:@"isFinished"];
-	
-	WSKResponse *response = [[[responseClass alloc] initWithRequest:self] autorelease];
+	response = [[responseClass alloc] initWithRequest:self];
 	[self requestFinishedWithResponse:response];
+	
+	[self setFinished:YES];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
@@ -159,18 +132,27 @@
 	[responseData appendData:data];
 }
 
-- (void)requestFinishedWithResponse:(WSKResponse *)response
+- (void)requestFinishedWithResponse:(WSKResponse *)aResponse
 {
-#if NS_BLOCKS_AVAILABLE
 	if (responseHandler) {
 		responseHandler(response);
-	} else
-#endif
-	{
-		if (delegate && [delegate respondsToSelector:@selector(request:didFinishWithResponse:)]) {
-			[delegate request:self didFinishWithResponse:response];
-		}
 	}
+}
+
+#pragma mark -
+#pragma mark Private Methods
+
+- (void)setExecuting:(BOOL)isExecuting
+{
+	[self willChangeValueForKey:@"isExecuting"];
+	executing = isExecuting;
+	[self didChangeValueForKey:@"isExecuting"];
+}
+- (void)setFinished:(BOOL)isFinished
+{
+	[self willChangeValueForKey:@"isFinished"];
+	finished = isFinished;
+	[self didChangeValueForKey:@"isFinished"];
 }
 
 @end

@@ -40,8 +40,6 @@ typedef void(^WSKSoapResponseHandler)(WSKSoapResponse *response, id obj, NSError
 - (WSKSoapRequest *)requestWithAction:(NSString *)action withObjects:(const id [])objects andKeys:(const id [])keys count:(NSUInteger)cnt;
 - (WSKSoapRequest *)requestWithAction:(NSString *)action withArgumentsAndKeys:(id)firstObject, ... NS_REQUIRES_NIL_TERMINATION;
 
-#if NS_BLOCKS_AVAILABLE
 - (void)performRequest:(WSKSoapRequest *)request withSoapResponseHandler:(WSKSoapResponseHandler)handler;
-#endif
 
 @end

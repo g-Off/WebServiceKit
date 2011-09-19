@@ -12,6 +12,7 @@ and associated objects with available methods exposed.
 - REST support
 - Pluggable object serialization/deserialization API for when the built-in ones won't do
 - iOS support (requires NSXMLNode/NSXMLElement/NSXMLDocument/etc. replacement)
+- Unit Tests
 
 ## Contributing
 Fork g-Off/WebServiceKit on GitHub and send a pull request.
