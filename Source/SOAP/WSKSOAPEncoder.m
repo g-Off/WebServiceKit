@@ -133,8 +133,9 @@
 		currentElement = rootElement;
 	}
 	
-	if ([objv isKindOfClass:[NSString class]] ||
-		[objv isKindOfClass:[NSCalendarDate class]] ||
+	if ([objv isKindOfClass:[NSString class]]) {
+		[element setStringValue:objv];
+	} else if ([objv isKindOfClass:[NSCalendarDate class]] ||
 		[objv isKindOfClass:[NSData class]] ||
 		[objv isKindOfClass:[NSURL class]]) {
 		[element setObjectValue:objv];
